@@ -1,4 +1,4 @@
-package com.douglasmatosdev.services;
+package com.douglasmatosdev;
 
 import com.douglasmatosdev.entities.User;
 import org.junit.Assert;

@@ -1,4 +1,4 @@
-package com.douglasmatosdev.services;
+package com.douglasmatosdev;
 
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
