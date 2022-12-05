@@ -16,7 +16,6 @@ import java.util.Date;
 public class RentalServiceTest {
 
     private RentalService service;
-    private static int counter = 0;
 
     @Rule
     public ErrorCollector errorCollector = new ErrorCollector();
@@ -27,8 +26,6 @@ public class RentalServiceTest {
     @Before
     public void before() {
         service = new RentalService();
-        counter++;
-        System.out.println(counter);
     }
 
     @Test
