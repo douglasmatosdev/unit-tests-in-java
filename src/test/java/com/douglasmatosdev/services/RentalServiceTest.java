@@ -9,6 +9,7 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ErrorCollector;
+import org.junit.rules.ExpectedException;
 
 import java.util.Date;
 
@@ -17,15 +18,18 @@ public class RentalServiceTest {
     @Rule
     public ErrorCollector errorCollector = new ErrorCollector();
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Test
-    public void test() {
+    public void testRental() throws Exception {
         // cenário
         RentalService service = new RentalService();
         User user = new User("Usuário 1");
         Movie movie = new Movie("Filme 1", 2, 5.0);
 
         // ação
-        Rental rental = service.alugarFilme(user, movie);
+        Rental rental = service.rentalMovie(user, movie);
 
         // verificação
         Assert.assertThat(rental.getPrice(), CoreMatchers.is(5.0));
@@ -40,8 +44,50 @@ public class RentalServiceTest {
         Assert.assertThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
 
         // Using ErrorCollector
-       errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(6.0)));
-       errorCollector.checkThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
-       errorCollector.checkThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(false));
+        errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(5.0)));
+        errorCollector.checkThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
+        errorCollector.checkThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
+
+    }
+
+    @Test(expected = Exception.class)
+    public void testRental_movieWithoutStock() throws Exception {
+        // cenário
+        RentalService service = new RentalService();
+        User user = new User("Usuário 1");
+        Movie movie = new Movie("Filme 1", 0, 5.0);
+
+        // ação
+        service.rentalMovie(user, movie);
+    }
+
+    @Test
+    public void testRental_movieWithoutStock2() {
+        // cenário
+        RentalService service = new RentalService();
+        User user = new User("Usuário 1");
+        Movie movie = new Movie("Filme 1", 0, 5.0);
+
+        // ação
+        try {
+            service.rentalMovie(user, movie);
+            Assert.fail("Should be throw exception");
+        } catch (Exception e) {
+            Assert.assertThat(e.getMessage(), CoreMatchers.is("Not has this movie in stock"));
+        }
+    }
+
+    @Test
+    public void testRental_movieWithoutStock3() throws Exception {
+        // cenário
+        RentalService service = new RentalService();
+        User user = new User("Usuário 1");
+        Movie movie = new Movie("Filme 1", 0, 5.0);
+
+        expectedException.expect(Exception.class);
+        expectedException.expectMessage("Not has this movie in stock");
+
+        // ação
+        service.rentalMovie(user, movie);
     }
 }

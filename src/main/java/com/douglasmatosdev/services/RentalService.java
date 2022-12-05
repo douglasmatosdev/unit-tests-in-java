@@ -9,7 +9,10 @@ import java.util.Date;
 
 public class RentalService {
 
-    public Rental alugarFilme(User user, Movie movie) {
+    public Rental rentalMovie(User user, Movie movie) throws Exception {
+        if(movie.getStock() == 0) {
+            throw new Exception("Not has this movie in stock");
+        }
         Rental rental = new Rental();
         rental.setFilme(movie);
         rental.setUsuario(user);
