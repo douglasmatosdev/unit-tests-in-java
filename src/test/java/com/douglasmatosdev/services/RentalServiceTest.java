@@ -6,11 +6,17 @@ import com.douglasmatosdev.entities.User;
 import com.douglasmatosdev.utils.DateUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 
 import java.util.Date;
 
 public class RentalServiceTest {
+
+    @Rule
+    public ErrorCollector errorCollector = new ErrorCollector();
+
     @Test
     public void test() {
         // cenário
@@ -32,5 +38,10 @@ public class RentalServiceTest {
 
         Assert.assertTrue(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)));
         Assert.assertThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
+
+        // Using ErrorCollector
+       errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(6.0)));
+       errorCollector.checkThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
+       errorCollector.checkThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(false));
     }
 }
