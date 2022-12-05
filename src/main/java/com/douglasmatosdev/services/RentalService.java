@@ -2,6 +2,7 @@ package com.douglasmatosdev.services;
 
 import com.douglasmatosdev.entities.Movie;
 import com.douglasmatosdev.exceptions.MovieWithoutStockException;
+import com.douglasmatosdev.exceptions.RentalCompanyException;
 import com.douglasmatosdev.utils.DateUtils;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
@@ -10,10 +11,19 @@ import java.util.Date;
 
 public class RentalService {
 
-    public Rental rentalMovie(User user, Movie movie) throws Exception {
+    public Rental rentalMovie(User user, Movie movie) throws MovieWithoutStockException, RentalCompanyException {
+        if (user == null) {
+            throw new RentalCompanyException("Empty User");
+        }
+
+        if (movie == null) {
+            throw new RentalCompanyException("Empty Movie");
+        }
+
         if(movie.getStock() == 0) {
             throw new MovieWithoutStockException();
         }
+
         Rental rental = new Rental();
         rental.setFilme(movie);
         rental.setUsuario(user);
