@@ -3,6 +3,7 @@ package com.douglasmatosdev.services;
 import com.douglasmatosdev.entities.Movie;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
+import com.douglasmatosdev.exceptions.MovieWithoutStockException;
 import com.douglasmatosdev.utils.DateUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
@@ -50,7 +51,7 @@ public class RentalServiceTest {
 
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = MovieWithoutStockException.class)
     public void testRental_movieWithoutStock() throws Exception {
         // cenário
         RentalService service = new RentalService();
@@ -61,33 +62,33 @@ public class RentalServiceTest {
         service.rentalMovie(user, movie);
     }
 
-    @Test
-    public void testRental_movieWithoutStock2() {
-        // cenário
-        RentalService service = new RentalService();
-        User user = new User("Usuário 1");
-        Movie movie = new Movie("Filme 1", 0, 5.0);
-
-        // ação
-        try {
-            service.rentalMovie(user, movie);
-            Assert.fail("Should be throw exception");
-        } catch (Exception e) {
-            Assert.assertThat(e.getMessage(), CoreMatchers.is("Not has this movie in stock"));
-        }
-    }
-
-    @Test
-    public void testRental_movieWithoutStock3() throws Exception {
-        // cenário
-        RentalService service = new RentalService();
-        User user = new User("Usuário 1");
-        Movie movie = new Movie("Filme 1", 0, 5.0);
-
-        expectedException.expect(Exception.class);
-        expectedException.expectMessage("Not has this movie in stock");
-
-        // ação
-        service.rentalMovie(user, movie);
-    }
+//    @Test
+//    public void testRental_movieWithoutStock2() {
+//        // cenário
+//        RentalService service = new RentalService();
+//        User user = new User("Usuário 1");
+//        Movie movie = new Movie("Filme 1", 0, 5.0);
+//
+//        // ação
+//        try {
+//            service.rentalMovie(user, movie);
+//            Assert.fail("Should be throw exception");
+//        } catch (Exception e) {
+//            Assert.assertThat(e.getMessage(), CoreMatchers.is("Not has this movie in stock"));
+//        }
+//    }
+//
+//    @Test
+//    public void testRental_movieWithoutStock3() throws Exception {
+//        // cenário
+//        RentalService service = new RentalService();
+//        User user = new User("Usuário 1");
+//        Movie movie = new Movie("Filme 1", 0, 5.0);
+//
+//        expectedException.expect(Exception.class);
+//        expectedException.expectMessage("Not has this movie in stock");
+//
+//        // ação
+//        service.rentalMovie(user, movie);
+//    }
 }

@@ -1,6 +1,7 @@
 package com.douglasmatosdev.services;
 
 import com.douglasmatosdev.entities.Movie;
+import com.douglasmatosdev.exceptions.MovieWithoutStockException;
 import com.douglasmatosdev.utils.DateUtils;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
@@ -11,7 +12,7 @@ public class RentalService {
 
     public Rental rentalMovie(User user, Movie movie) throws Exception {
         if(movie.getStock() == 0) {
-            throw new Exception("Not has this movie in stock");
+            throw new MovieWithoutStockException();
         }
         Rental rental = new Rental();
         rental.setFilme(movie);
