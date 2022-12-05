@@ -11,7 +11,9 @@ import org.junit.*;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class RentalServiceTest {
 
@@ -32,13 +34,17 @@ public class RentalServiceTest {
     public void testRental() throws Exception {
         // cenário
         User user = new User("Usuário 1");
-        Movie movie = new Movie("Filme 1", 2, 5.0);
+        List<Movie> movies = Arrays.asList(
+                new Movie("Filme 1", 4, 5.0),
+                new Movie("Filme 2", 5, 5.0),
+                new Movie("Filme 3", 6, 5.0)
+        );
 
         // ação
-        Rental rental = service.rentalMovie(user, movie);
+        Rental rental = service.rentalMovies(user, movies);
 
         // verificação
-        errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(5.0)));
+        errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(15.0)));
         errorCollector.checkThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
         errorCollector.checkThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
     }
@@ -47,10 +53,14 @@ public class RentalServiceTest {
     public void testRental_movieWithoutStock() throws Exception {
         // cenário
         User user = new User("Usuário 1");
-        Movie movie = new Movie("Filme 1", 0, 5.0);
+        List<Movie> movies = Arrays.asList(
+                new Movie("Filme 1", 0, 5.0),
+                new Movie("Filme 2", 0, 5.0),
+                new Movie("Filme 3", 0, 5.0)
+        );
 
         // ação
-        service.rentalMovie(user, movie);
+        service.rentalMovies(user, movies);
     }
 
     /**
@@ -59,11 +69,15 @@ public class RentalServiceTest {
     @Test
     public void testRental_userEmpty() throws MovieWithoutStockException {
         // cenário
-        Movie movie = new Movie("Filme 1", 1, 5.0);
+        List<Movie> movies = Arrays.asList(
+                new Movie("Filme 1", 4, 5.0),
+                new Movie("Filme 2", 5, 5.0),
+                new Movie("Filme 3", 6, 5.0)
+        );
 
         // ação
         try {
-            service.rentalMovie(null, movie);
+            service.rentalMovies(null, movies);
             Assert.fail();
         } catch (RentalCompanyException e) {
             Assert.assertThat(e.getMessage(), CoreMatchers.is("Empty User"));
@@ -84,6 +98,6 @@ public class RentalServiceTest {
         expectedException.expectMessage("Empty Movie");
 
         // ação
-        service.rentalMovie(user, null);
+        service.rentalMovies(user, null);
     }
 }

@@ -1,15 +1,24 @@
 package com.douglasmatosdev.entities;
 
 import java.util.Date;
+import java.util.List;
 
 public class Rental {
 
 	private User user;
-	private Movie movie;
+	private List<Movie> movies;
 	private Date dateRental;
 	private Date dateReturn;
 	private Double price;
-	
+
+	public List<Movie> getMovies() {
+		return movies;
+	}
+
+	public void setMovies(List<Movie> movies) {
+		this.movies = movies;
+	}
+
 	public User getUsuario() {
 		return user;
 	}
@@ -34,10 +43,5 @@ public class Rental {
 	public void setPrice(Double price) {
 		this.price = price;
 	}
-	public Movie getFilme() {
-		return movie;
-	}
-	public void setFilme(Movie movie) {
-		this.movie = movie;
-	}
+
 }
