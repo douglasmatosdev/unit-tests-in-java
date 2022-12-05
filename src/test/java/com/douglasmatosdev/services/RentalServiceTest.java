@@ -16,7 +16,7 @@ import java.util.Date;
 public class RentalServiceTest {
 
     private RentalService service;
-
+    private static int counter = 0;
 
     @Rule
     public ErrorCollector errorCollector = new ErrorCollector();
@@ -27,24 +27,9 @@ public class RentalServiceTest {
     @Before
     public void before() {
         service = new RentalService();
-        System.out.println("Before");
+        counter++;
+        System.out.println(counter);
     }
-
-    @After
-    public void after() {
-        System.out.println("After");
-    }
-
-    @BeforeClass
-    public static void beforeClass() {
-        System.out.println("BeforeClass");
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        System.out.println("AfterClass");
-    }
-
 
     @Test
     public void testRental() throws Exception {
@@ -56,22 +41,9 @@ public class RentalServiceTest {
         Rental rental = service.rentalMovie(user, movie);
 
         // verificação
-        Assert.assertThat(rental.getPrice(), CoreMatchers.is(5.0));
-        Assert.assertThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.not(6.0)));
-        Assert.assertThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(5.0)));
-        Assert.assertEquals(5.0, rental.getPrice(), 0.01);
-
-        Assert.assertTrue(DateUtils.isSameDate(rental.getDateRental(), new Date()));
-        Assert.assertThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
-
-        Assert.assertTrue(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)));
-        Assert.assertThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
-
-        // Using ErrorCollector
         errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(5.0)));
         errorCollector.checkThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
         errorCollector.checkThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
-
     }
 
     @Test(expected = MovieWithoutStockException.class)
@@ -79,8 +51,6 @@ public class RentalServiceTest {
         // cenário
         User user = new User("Usuário 1");
         Movie movie = new Movie("Filme 1", 0, 5.0);
-
-        System.out.println("Test!!!");
 
         // ação
         service.rentalMovie(user, movie);
