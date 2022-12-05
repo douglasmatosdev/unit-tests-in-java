@@ -1,6 +1,6 @@
-package br.ce.wcaquino.services;
+package com.douglasmatosdev.services;
 
-import br.ce.wcaquino.entidades.Usuario;
+import com.douglasmatosdev.entities.User;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,9 +38,9 @@ public class AssertTest {
         Assert.assertTrue("bola".startsWith("bo"));
 
         // Objetos com instâncias diferentes mas é o mesmo uruário
-        Usuario u1 = new Usuario("Usuário 1");
-        Usuario u2 = new Usuario("Usuário 1");
-        Usuario u3 = u2;
+        User u1 = new User("Usuário 1");
+        User u2 = new User("Usuário 1");
+        User u3 = u2;
         Assert.assertEquals(u1, u2);
 
         // Objetos com instâncias iguais mas não é o mesmo uruário
