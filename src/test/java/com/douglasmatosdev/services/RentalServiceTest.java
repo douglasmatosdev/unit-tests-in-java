@@ -7,9 +7,7 @@ import com.douglasmatosdev.exceptions.MovieWithoutStockException;
 import com.douglasmatosdev.exceptions.RentalCompanyException;
 import com.douglasmatosdev.utils.DateUtils;
 import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
@@ -17,16 +15,40 @@ import java.util.Date;
 
 public class RentalServiceTest {
 
+    private RentalService service;
+
+
     @Rule
     public ErrorCollector errorCollector = new ErrorCollector();
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    @Before
+    public void before() {
+        service = new RentalService();
+        System.out.println("Before");
+    }
+
+    @After
+    public void after() {
+        System.out.println("After");
+    }
+
+    @BeforeClass
+    public static void beforeClass() {
+        System.out.println("BeforeClass");
+    }
+
+    @AfterClass
+    public static void afterClass() {
+        System.out.println("AfterClass");
+    }
+
+
     @Test
     public void testRental() throws Exception {
         // cenário
-        RentalService service = new RentalService();
         User user = new User("Usuário 1");
         Movie movie = new Movie("Filme 1", 2, 5.0);
 
@@ -55,9 +77,10 @@ public class RentalServiceTest {
     @Test(expected = MovieWithoutStockException.class)
     public void testRental_movieWithoutStock() throws Exception {
         // cenário
-        RentalService service = new RentalService();
         User user = new User("Usuário 1");
         Movie movie = new Movie("Filme 1", 0, 5.0);
+
+        System.out.println("Test!!!");
 
         // ação
         service.rentalMovie(user, movie);
@@ -69,7 +92,6 @@ public class RentalServiceTest {
     @Test
     public void testRental_userEmpty() throws MovieWithoutStockException {
         // cenário
-        RentalService service = new RentalService();
         Movie movie = new Movie("Filme 1", 1, 5.0);
 
         // ação
@@ -83,12 +105,12 @@ public class RentalServiceTest {
 
     /**
      * 3° forma de tratar exceptions, FORMA NOVA
+     *
      * @throws Exception
      */
     @Test
     public void testRental_movieEmpty() throws MovieWithoutStockException, RentalCompanyException {
         // cenário
-        RentalService service = new RentalService();
         User user = new User("Usuário 1");
 
         expectedException.expect(RentalCompanyException.class);
@@ -97,56 +119,4 @@ public class RentalServiceTest {
         // ação
         service.rentalMovie(user, null);
     }
-
-    /**
-     * 1º forma de tratar exceptions. FORMA ELEGANTE
-     * @throws Exception
-     */
-//    @Test(expected = MovieWithoutStockException.class)
-//    public void testRental_movieWithoutStock() throws Exception {
-//        // cenário
-//        RentalService service = new RentalService();
-//        User user = new User("Usuário 1");
-//        Movie movie = new Movie("Filme 1", 0, 5.0);
-//
-//        // ação
-//        service.rentalMovie(user, movie);
-//    }
-
-    /**
-     * 2º forma de tratar exceptions, FORMA ROBUSTA
-     */
-//    @Test
-//    public void testRental_movieWithoutStock2() {
-//        // cenário
-//        RentalService service = new RentalService();
-//        User user = new User("Usuário 1");
-//        Movie movie = new Movie("Filme 1", 0, 5.0);
-//
-//        // ação
-//        try {
-//            service.rentalMovie(user, movie);
-//            Assert.fail("Should be throw exception");
-//        } catch (Exception e) {
-//            Assert.assertThat(e.getMessage(), CoreMatchers.is("Not has this movie in stock"));
-//        }
-//    }
-
-    /**
-     * 3° forma de tratar exceptions, FORMA NOVA
-     * @throws Exception
-     */
-//    @Test
-//    public void testRental_movieWithoutStock3() throws Exception {
-//        // cenário
-//        RentalService service = new RentalService();
-//        User user = new User("Usuário 1");
-//        Movie movie = new Movie("Filme 1", 0, 5.0);
-//
-//        expectedException.expect(Exception.class);
-//        expectedException.expectMessage("Not has this movie in stock");
-//
-//        // ação
-//        service.rentalMovie(user, movie);
-//    }
 }
