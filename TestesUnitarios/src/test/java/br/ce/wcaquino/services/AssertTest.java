@@ -1,2 +1,11 @@
-package br.ce.wcaquino.services;public class AssertTest {
+package br.ce.wcaquino.services;
+
+import org.junit.Test;
+
+public class AssertTest {
+
+    @Test
+    public void test(){
+
+    }
 }
