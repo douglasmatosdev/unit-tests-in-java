@@ -8,27 +8,34 @@ import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
 
 import java.util.Date;
+import java.util.List;
 
 public class RentalService {
 
-    public Rental rentalMovie(User user, Movie movie) throws MovieWithoutStockException, RentalCompanyException {
+    public Rental rentalMovies(User user, List<Movie> movies) throws RentalCompanyException, MovieWithoutStockException {
         if (user == null) {
             throw new RentalCompanyException("Empty User");
         }
 
-        if (movie == null) {
+        if (movies == null || movies.isEmpty()) {
             throw new RentalCompanyException("Empty Movie");
         }
 
-        if(movie.getStock() == 0) {
-            throw new MovieWithoutStockException();
+        for (Movie movie : movies) {
+            if (movie.getStock() == 0) {
+                throw new MovieWithoutStockException();
+            }
         }
 
         Rental rental = new Rental();
-        rental.setFilme(movie);
+        rental.setMovies(movies);
         rental.setUsuario(user);
         rental.setDateRental(new Date());
-        rental.setPrice(movie.getPriceRental());
+        Double price = 0d;
+        for (Movie movie : movies) {
+            price += movie.getPriceRental();
+        }
+        rental.setPrice(price);
 
         //Entrega no dia seguinte
         Date daliveryDate = new Date();
@@ -40,6 +47,4 @@ public class RentalService {
 
         return rental;
     }
-
-
 }
