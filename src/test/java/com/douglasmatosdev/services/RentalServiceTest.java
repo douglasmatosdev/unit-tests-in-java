@@ -12,6 +12,7 @@ import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,6 +33,11 @@ public class RentalServiceTest {
 
     @Test
     public void shouldRentalMovie() throws Exception {
+        /**
+         * Este teste só funciona aos sábados
+         */
+        Assume.assumeFalse(DateUtils.verifyDayWeek(new Date(), Calendar.SATURDAY));
+
         // scenario
         User user = new User("Usuário 1");
         List<Movie> movies = Arrays.asList(
@@ -170,4 +176,22 @@ public class RentalServiceTest {
         Assert.assertThat(rental.getPrice(), CoreMatchers.is(14.0));
     }
 
+    @Test
+    public void shouldDeliveryInSundayIfRentOnSaturday() throws MovieWithoutStockException, RentalCompanyException {
+        /**
+         * Este teste só funciona aos sábados
+         */
+        Assume.assumeTrue(DateUtils.verifyDayWeek(new Date(), Calendar.SATURDAY));
+
+        // scenario
+        User user = new User("User 1");
+        List<Movie> movies = Arrays.asList(new Movie("Filme 1", 1, 5.0));
+
+        // action
+        Rental rental = service.rentalMovies(user, movies);
+
+        // verification
+        boolean isMonday = DateUtils.verifyDayWeek(rental.getDateReturn(), Calendar.MONDAY);
+        Assert.assertTrue(isMonday);
+    }
 }

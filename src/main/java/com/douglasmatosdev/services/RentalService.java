@@ -7,6 +7,7 @@ import com.douglasmatosdev.utils.DateUtils;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -55,9 +56,12 @@ public class RentalService {
         rental.setPrice(totalPrice);
 
         //Entrega no dia seguinte
-        Date daliveryDate = new Date();
-        daliveryDate = DateUtils.addDays(daliveryDate, 1);
-        rental.setDateReturn(daliveryDate);
+        Date deliveryDate = new Date();
+        deliveryDate = DateUtils.addDays(deliveryDate, 1);
+        if (DateUtils.verifyDayWeek(deliveryDate, Calendar.SUNDAY)) {
+            deliveryDate = DateUtils.addDays(deliveryDate, 1);
+        }
+        rental.setDateReturn(deliveryDate);
 
         //Salvando a locacao...
         //TODO adicionar método para salvar
