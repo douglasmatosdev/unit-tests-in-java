@@ -31,11 +31,28 @@ public class RentalService {
         rental.setMovies(movies);
         rental.setUsuario(user);
         rental.setDateRental(new Date());
-        Double price = 0d;
-        for (Movie movie : movies) {
-            price += movie.getPriceRental();
+        Double totalPrice = 0d;
+        for (int i = 0; i < movies.size(); i++) {
+            Movie movie = movies.get(i);
+            Double price = movie.getPriceRental();
+            switch (i) {
+                case 2:
+                    price = price * 0.75;
+                    break;
+                case 3:
+                    price = price * 0.5;
+                    break;
+                case 4:
+                    price = price * 0.25;
+                    break;
+                case 5:
+                    price = 0d;
+                    break;
+            }
+
+            totalPrice += price;
         }
-        rental.setPrice(price);
+        rental.setPrice(totalPrice);
 
         //Entrega no dia seguinte
         Date daliveryDate = new Date();

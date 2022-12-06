@@ -31,27 +31,26 @@ public class RentalServiceTest {
     }
 
     @Test
-    public void testRental() throws Exception {
-        // cenário
+    public void shouldRentalMovie() throws Exception {
+        // scenario
         User user = new User("Usuário 1");
         List<Movie> movies = Arrays.asList(
                 new Movie("Filme 1", 4, 5.0),
-                new Movie("Filme 2", 5, 5.0),
-                new Movie("Filme 3", 6, 5.0)
+                new Movie("Filme 2", 5, 5.0)
         );
 
-        // ação
+        // action
         Rental rental = service.rentalMovies(user, movies);
 
-        // verificação
-        errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(15.0)));
+        // verification
+        errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(10.0)));
         errorCollector.checkThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
         errorCollector.checkThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
     }
 
     @Test(expected = MovieWithoutStockException.class)
-    public void testRental_movieWithoutStock() throws Exception {
-        // cenário
+    public void shouldThrowExceptionWhenTryRentMovieWithoutStock() throws Exception {
+        // scenario
         User user = new User("Usuário 1");
         List<Movie> movies = Arrays.asList(
                 new Movie("Filme 1", 0, 5.0),
@@ -59,23 +58,20 @@ public class RentalServiceTest {
                 new Movie("Filme 3", 0, 5.0)
         );
 
-        // ação
+        // action
         service.rentalMovies(user, movies);
     }
 
-    /**
-     * 2º forma de tratar exceptions, FORMA ROBUSTA
-     */
     @Test
-    public void testRental_userEmpty() throws MovieWithoutStockException {
-        // cenário
+    public void shouldThrowExceptionWhenTryRentMovieWithoutUser() throws MovieWithoutStockException {
+        // scenario
         List<Movie> movies = Arrays.asList(
                 new Movie("Filme 1", 4, 5.0),
                 new Movie("Filme 2", 5, 5.0),
                 new Movie("Filme 3", 6, 5.0)
         );
 
-        // ação
+        // action
         try {
             service.rentalMovies(null, movies);
             Assert.fail();
@@ -84,20 +80,94 @@ public class RentalServiceTest {
         }
     }
 
-    /**
-     * 3° forma de tratar exceptions, FORMA NOVA
-     *
-     * @throws Exception
-     */
     @Test
-    public void testRental_movieEmpty() throws MovieWithoutStockException, RentalCompanyException {
-        // cenário
+    public void shouldThrowExceptionWhenTryRentMovieWithoutMovie() throws MovieWithoutStockException, RentalCompanyException {
+        // scenario
         User user = new User("Usuário 1");
 
         expectedException.expect(RentalCompanyException.class);
         expectedException.expectMessage("Empty Movie");
 
-        // ação
+        // action
         service.rentalMovies(user, null);
     }
+
+    @Test
+    public void shouldApply25PercentDiscountOnTheThirdMovie() throws Exception {
+        // scenario
+        User user = new User("Usuário 1");
+        List<Movie> movies = Arrays.asList(
+                new Movie("Filme 1", 2, 4.0),
+                new Movie("Filme 2", 3, 4.0),
+                new Movie("Filme 3", 4, 4.0)
+        );
+
+        // action
+        Rental rental = service.rentalMovies(user, movies);
+
+        // verification
+        // 4+4+3=11
+        Assert.assertThat(rental.getPrice(), CoreMatchers.is(11.0));
+    }
+
+    @Test
+    public void shouldApply50PercentDiscountOnTheFourthMovie() throws Exception {
+        // scenario
+        User user = new User("Usuário 1");
+        List<Movie> movies = Arrays.asList(
+                new Movie("Filme 1", 2, 4.0),
+                new Movie("Filme 2", 2, 4.0),
+                new Movie("Filme 3", 3, 4.0),
+                new Movie("Filme 4", 4, 4.0)
+        );
+
+        // action
+        Rental rental = service.rentalMovies(user, movies);
+
+        // verification
+        // 4+4+3+2=13
+        Assert.assertThat(rental.getPrice(), CoreMatchers.is(13.0));
+    }
+
+    @Test
+    public void shouldApply75PercentDiscountOnTheFifthMovie() throws Exception {
+        // scenario
+        User user = new User("Usuário 1");
+        List<Movie> movies = Arrays.asList(
+                new Movie("Filme 1", 2, 4.0),
+                new Movie("Filme 2", 2, 4.0),
+                new Movie("Filme 3", 3, 4.0),
+                new Movie("Filme 4", 4, 4.0),
+                new Movie("Filme 5", 4, 4.0)
+        );
+
+        // action
+        Rental rental = service.rentalMovies(user, movies);
+
+        // verification
+        // 4+4+3+2+1=14
+        Assert.assertThat(rental.getPrice(), CoreMatchers.is(14.0));
+    }
+
+    @Test
+    public void shouldApply100PercentDiscountOnTheSixthMovie() throws Exception {
+        // scenario
+        User user = new User("Usuário 1");
+        List<Movie> movies = Arrays.asList(
+                new Movie("Filme 1", 2, 4.0),
+                new Movie("Filme 2", 2, 4.0),
+                new Movie("Filme 3", 3, 4.0),
+                new Movie("Filme 4", 4, 4.0),
+                new Movie("Filme 5", 4, 4.0),
+                new Movie("Filme 6", 4, 4.0)
+        );
+
+        // action
+        Rental rental = service.rentalMovies(user, movies);
+
+        // verification
+        // 4+4+3+2+1+0=14
+        Assert.assertThat(rental.getPrice(), CoreMatchers.is(14.0));
+    }
+
 }
