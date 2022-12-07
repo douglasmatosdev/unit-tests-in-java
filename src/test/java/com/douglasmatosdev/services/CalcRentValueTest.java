@@ -2,6 +2,8 @@ package com.douglasmatosdev.services;
 
 import com.douglasmatosdev.builders.MovieBuilder;
 import com.douglasmatosdev.builders.UserBuilder;
+import com.douglasmatosdev.daos.RentalDAO;
+import com.douglasmatosdev.daos.RentalDAOFake;
 import com.douglasmatosdev.entities.Movie;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
@@ -30,6 +32,8 @@ public class CalcRentValueTest {
     @Before
     public void before() {
         service = new RentalService();
+        RentalDAO rentalDAO = new RentalDAOFake();
+        service.setRentalDAO(rentalDAO);
     }
 
     private static Movie movie1 = MovieBuilder.oneMovie().build();

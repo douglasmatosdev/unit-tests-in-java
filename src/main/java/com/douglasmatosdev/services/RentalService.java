@@ -1,5 +1,6 @@
 package com.douglasmatosdev.services;
 
+import com.douglasmatosdev.daos.RentalDAO;
 import com.douglasmatosdev.entities.Movie;
 import com.douglasmatosdev.exceptions.MovieWithoutStockException;
 import com.douglasmatosdev.exceptions.RentalCompanyException;
@@ -12,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 public class RentalService {
+    private RentalDAO dao;
 
     public Rental rentalMovies(User user, List<Movie> movies) throws RentalCompanyException, MovieWithoutStockException {
         if (user == null) {
@@ -64,8 +66,13 @@ public class RentalService {
         rental.setDateReturn(deliveryDate);
 
         //Salvando a locacao...
-        //TODO adicionar método para salvar
+        dao.save(rental);
 
         return rental;
+    }
+
+    // Dependency injection
+    public void setRentalDAO(RentalDAO rentalDAO) {
+        this.dao = rentalDAO;
     }
 }

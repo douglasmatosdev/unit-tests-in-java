@@ -3,6 +3,8 @@ package com.douglasmatosdev.services;
 import buildermaster.BuilderMaster;
 import com.douglasmatosdev.builders.MovieBuilder;
 import com.douglasmatosdev.builders.UserBuilder;
+import com.douglasmatosdev.daos.RentalDAO;
+import com.douglasmatosdev.daos.RentalDAOFake;
 import com.douglasmatosdev.entities.Movie;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
@@ -33,6 +35,8 @@ public class RentalServiceTest {
     @Before
     public void before() {
         service = new RentalService();
+        RentalDAO rentalDAO = new RentalDAOFake();
+        service.setRentalDAO(rentalDAO);
     }
 
     @Test
