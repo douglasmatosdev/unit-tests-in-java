@@ -1,5 +1,6 @@
 package com.douglasmatosdev.services;
 
+import buildermaster.BuilderMaster;
 import com.douglasmatosdev.builders.MovieBuilder;
 import com.douglasmatosdev.builders.UserBuilder;
 import com.douglasmatosdev.entities.Movie;
@@ -42,7 +43,7 @@ public class RentalServiceTest {
         Assume.assumeFalse(DateUtils.verifyDayWeek(new Date(), Calendar.SATURDAY));
 
         // scenario
-        User user = UserBuilder.oneUser().now();
+        User user = UserBuilder.oneUser().build();
         List<Movie> movies = Arrays.asList(MovieBuilder.oneMovie().withValue(5.0).build());
 
         // action
@@ -57,7 +58,7 @@ public class RentalServiceTest {
     @Test(expected = MovieWithoutStockException.class)
     public void shouldThrowExceptionWhenTryRentMovieWithoutStock() throws Exception {
         // scenario
-        User user = UserBuilder.oneUser().now();
+        User user = UserBuilder.oneUser().build();
 
         // Wih pattern Chaining method
         // List<Movie> movies = Arrays.asList(MovieBuilder.oneMovie().withoutStock().now());
@@ -90,7 +91,7 @@ public class RentalServiceTest {
     @Test
     public void shouldThrowExceptionWhenTryRentMovieWithoutMovie() throws MovieWithoutStockException, RentalCompanyException {
         // scenario
-        User user = UserBuilder.oneUser().now();
+        User user = UserBuilder.oneUser().build();
 
         expectedException.expect(RentalCompanyException.class);
         expectedException.expectMessage("Empty Movie");
@@ -117,4 +118,7 @@ public class RentalServiceTest {
         Assert.assertThat(rental.getDateReturn(), CustomMatchers.willBeMonday());
     }
 
+    public static void main(String[] args) {
+        new BuilderMaster().gerarCodigoClasse(Rental.class);
+    }
 }

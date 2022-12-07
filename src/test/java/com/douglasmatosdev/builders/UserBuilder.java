@@ -16,7 +16,7 @@ public class UserBuilder {
         return userBuilder;
     }
 
-    public User now() {
+    public User build() {
         return user;
     }
 }

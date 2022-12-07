@@ -19,12 +19,6 @@ public class Rental {
 		this.movies = movies;
 	}
 
-	public User getUsuario() {
-		return user;
-	}
-	public void setUsuario(User user) {
-		this.user = user;
-	}
 	public Date getDateRental() {
 		return dateRental;
 	}
@@ -44,4 +38,11 @@ public class Rental {
 		this.price = price;
 	}
 
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 }

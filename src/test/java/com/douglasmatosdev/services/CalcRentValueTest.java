@@ -56,7 +56,7 @@ public class CalcRentValueTest {
     @Test
     public void shouldCalcRentValueAndApplyDiscount() throws Exception {
         // scenario
-        User user = UserBuilder.oneUser().now();
+        User user = UserBuilder.oneUser().build();
 
         // action
         Rental rental = service.rentalMovies(user, movies);

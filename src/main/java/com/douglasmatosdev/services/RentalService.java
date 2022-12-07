@@ -30,7 +30,7 @@ public class RentalService {
 
         Rental rental = new Rental();
         rental.setMovies(movies);
-        rental.setUsuario(user);
+        rental.setUser(user);
         rental.setDateRental(new Date());
         Double totalPrice = 0d;
         for (int i = 0; i < movies.size(); i++) {
