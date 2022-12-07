@@ -1,5 +1,7 @@
 package com.douglasmatosdev.services;
 
+import com.douglasmatosdev.builders.MovieBuilder;
+import com.douglasmatosdev.builders.UserBuilder;
 import com.douglasmatosdev.entities.Movie;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
@@ -30,13 +32,13 @@ public class CalcRentValueTest {
         service = new RentalService();
     }
 
-    private static Movie movie1 = new Movie("Filme 1", 2, 4.0);
-    private static Movie movie2 = new Movie("Filme 2", 2, 4.0);
-    private static Movie movie3 = new Movie("Filme 3", 2, 4.0);
-    private static Movie movie4 = new Movie("Filme 4", 2, 4.0);
-    private static Movie movie5 = new Movie("Filme 5", 2, 4.0);
-    private static Movie movie6 = new Movie("Filme 6", 2, 4.0);
-    private static Movie movie7 = new Movie("Filme 7", 2, 4.0);
+    private static Movie movie1 = MovieBuilder.oneMovie().build();
+    private static Movie movie2 = MovieBuilder.oneMovie().build();
+    private static Movie movie3 = MovieBuilder.oneMovie().build();
+    private static Movie movie4 = MovieBuilder.oneMovie().build();
+    private static Movie movie5 = MovieBuilder.oneMovie().build();
+    private static Movie movie6 = MovieBuilder.oneMovie().build();
+    private static Movie movie7 = MovieBuilder.oneMovie().build();
 
 
     @Parameterized.Parameters(name = "{2}")
@@ -54,7 +56,7 @@ public class CalcRentValueTest {
     @Test
     public void shouldCalcRentValueAndApplyDiscount() throws Exception {
         // scenario
-        User user = new User("Usuário 1");
+        User user = UserBuilder.oneUser().now();
 
         // action
         Rental rental = service.rentalMovies(user, movies);

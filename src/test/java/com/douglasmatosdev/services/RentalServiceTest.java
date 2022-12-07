@@ -1,5 +1,7 @@
 package com.douglasmatosdev.services;
 
+import com.douglasmatosdev.builders.MovieBuilder;
+import com.douglasmatosdev.builders.UserBuilder;
 import com.douglasmatosdev.entities.Movie;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
@@ -40,32 +42,28 @@ public class RentalServiceTest {
         Assume.assumeFalse(DateUtils.verifyDayWeek(new Date(), Calendar.SATURDAY));
 
         // scenario
-        User user = new User("Usuário 1");
-        List<Movie> movies = Arrays.asList(
-                new Movie("Filme 1", 4, 5.0),
-                new Movie("Filme 2", 5, 5.0)
-        );
+        User user = UserBuilder.oneUser().now();
+        List<Movie> movies = Arrays.asList(MovieBuilder.oneMovie().withValue(5.0).build());
 
         // action
         Rental rental = service.rentalMovies(user, movies);
 
         // verification
-        errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(10.0)));
-//        errorCollector.checkThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
+        errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(5.0));
         errorCollector.checkThat(rental.getDateRental(), CustomMatchers.isToday());
-//        errorCollector.checkThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
         errorCollector.checkThat(rental.getDateReturn(), CustomMatchers.isTodayDiffDays(1));
     }
 
     @Test(expected = MovieWithoutStockException.class)
     public void shouldThrowExceptionWhenTryRentMovieWithoutStock() throws Exception {
         // scenario
-        User user = new User("Usuário 1");
-        List<Movie> movies = Arrays.asList(
-                new Movie("Filme 1", 0, 5.0),
-                new Movie("Filme 2", 0, 5.0),
-                new Movie("Filme 3", 0, 5.0)
-        );
+        User user = UserBuilder.oneUser().now();
+
+        // Wih pattern Chaining method
+        // List<Movie> movies = Arrays.asList(MovieBuilder.oneMovie().withoutStock().now());
+
+        // With pattern Object model
+        List<Movie> movies = Arrays.asList(MovieBuilder.oneMovieWithoutStock().build());
 
         // action
         service.rentalMovies(user, movies);
@@ -75,9 +73,9 @@ public class RentalServiceTest {
     public void shouldThrowExceptionWhenTryRentMovieWithoutUser() throws MovieWithoutStockException {
         // scenario
         List<Movie> movies = Arrays.asList(
-                new Movie("Filme 1", 4, 5.0),
-                new Movie("Filme 2", 5, 5.0),
-                new Movie("Filme 3", 6, 5.0)
+                MovieBuilder.oneMovie().build(),
+                MovieBuilder.oneMovie().build(),
+                MovieBuilder.oneMovie().build()
         );
 
         // action
@@ -92,7 +90,7 @@ public class RentalServiceTest {
     @Test
     public void shouldThrowExceptionWhenTryRentMovieWithoutMovie() throws MovieWithoutStockException, RentalCompanyException {
         // scenario
-        User user = new User("Usuário 1");
+        User user = UserBuilder.oneUser().now();
 
         expectedException.expect(RentalCompanyException.class);
         expectedException.expectMessage("Empty Movie");
@@ -110,15 +108,12 @@ public class RentalServiceTest {
 
         // scenario
         User user = new User("User 1");
-        List<Movie> movies = Arrays.asList(new Movie("Filme 1", 1, 5.0));
+        List<Movie> movies = Arrays.asList(MovieBuilder.oneMovie().build());
 
         // action
         Rental rental = service.rentalMovies(user, movies);
 
         // verification
-        // Assert.assertThat(rental.getDateReturn(), new DayWeekMatcher(Calendar.MONDAY));
-        // Assert.assertThat(rental.getDateReturn(), CustomMatchers.willBe(Calendar.MONDAY));
-        // Assert.assertThat(rental.getDateReturn(), CustomMatchers.willBe(Calendar.SUNDAY));
         Assert.assertThat(rental.getDateReturn(), CustomMatchers.willBeMonday());
     }
 
