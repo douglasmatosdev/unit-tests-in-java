@@ -62,9 +62,4 @@ public class CalcRentValueTest {
         // verification
         Assert.assertThat(rental.getPrice(), CoreMatchers.is(rentValue));
     }
-
-    @Test
-    public void print() {
-        System.out.println(rentValue);
-    }
 }
