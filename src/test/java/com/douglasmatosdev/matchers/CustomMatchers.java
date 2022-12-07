@@ -11,4 +11,11 @@ public class CustomMatchers {
     public static DayWeekMatcher willBeMonday() {
         return new DayWeekMatcher(Calendar.MONDAY);
     }
+
+    public static DateDiffDayMatcher isTodayDiffDays(Integer amountDays) {
+        return new DateDiffDayMatcher(amountDays);
+    }
+    public static DateDiffDayMatcher isToday() {
+        return new DateDiffDayMatcher(0);
+    }
 }

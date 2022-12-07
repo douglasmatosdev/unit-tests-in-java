@@ -51,8 +51,10 @@ public class RentalServiceTest {
 
         // verification
         errorCollector.checkThat(rental.getPrice(), CoreMatchers.is(CoreMatchers.equalTo(10.0)));
-        errorCollector.checkThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
-        errorCollector.checkThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
+//        errorCollector.checkThat(DateUtils.isSameDate(rental.getDateRental(), new Date()), CoreMatchers.is(true));
+        errorCollector.checkThat(rental.getDateRental(), CustomMatchers.isToday());
+//        errorCollector.checkThat(DateUtils.isSameDate(rental.getDateReturn(), DateUtils.getDateWithDiffDays(1)), CoreMatchers.is(true));
+        errorCollector.checkThat(rental.getDateReturn(), CustomMatchers.isTodayDiffDays(1));
     }
 
     @Test(expected = MovieWithoutStockException.class)
