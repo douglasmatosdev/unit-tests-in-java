@@ -5,6 +5,7 @@ import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
 import com.douglasmatosdev.exceptions.MovieWithoutStockException;
 import com.douglasmatosdev.exceptions.RentalCompanyException;
+import com.douglasmatosdev.matchers.CustomMatchers;
 import com.douglasmatosdev.utils.DateUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.*;
@@ -113,7 +114,10 @@ public class RentalServiceTest {
         Rental rental = service.rentalMovies(user, movies);
 
         // verification
-        boolean isMonday = DateUtils.verifyDayWeek(rental.getDateReturn(), Calendar.MONDAY);
-        Assert.assertTrue(isMonday);
+        // Assert.assertThat(rental.getDateReturn(), new DayWeekMatcher(Calendar.MONDAY));
+        // Assert.assertThat(rental.getDateReturn(), CustomMatchers.willBe(Calendar.MONDAY));
+        // Assert.assertThat(rental.getDateReturn(), CustomMatchers.willBe(Calendar.SUNDAY));
+        Assert.assertThat(rental.getDateReturn(), CustomMatchers.willBeMonday());
     }
+
 }
