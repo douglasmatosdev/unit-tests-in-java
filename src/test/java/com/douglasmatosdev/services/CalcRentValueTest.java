@@ -3,7 +3,6 @@ package com.douglasmatosdev.services;
 import com.douglasmatosdev.builders.MovieBuilder;
 import com.douglasmatosdev.builders.UserBuilder;
 import com.douglasmatosdev.daos.RentalDAO;
-import com.douglasmatosdev.daos.RentalDAOFake;
 import com.douglasmatosdev.entities.Movie;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
@@ -13,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,7 +32,7 @@ public class CalcRentValueTest {
     @Before
     public void before() {
         service = new RentalService();
-        RentalDAO rentalDAO = new RentalDAOFake();
+        RentalDAO rentalDAO = Mockito.mock(RentalDAO.class);
         service.setRentalDAO(rentalDAO);
     }
 

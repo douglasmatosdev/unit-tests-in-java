@@ -1,10 +1,8 @@
 package com.douglasmatosdev.services;
 
-import buildermaster.BuilderMaster;
 import com.douglasmatosdev.builders.MovieBuilder;
 import com.douglasmatosdev.builders.UserBuilder;
 import com.douglasmatosdev.daos.RentalDAO;
-import com.douglasmatosdev.daos.RentalDAOFake;
 import com.douglasmatosdev.entities.Movie;
 import com.douglasmatosdev.entities.Rental;
 import com.douglasmatosdev.entities.User;
@@ -16,6 +14,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.*;
 import org.junit.rules.ErrorCollector;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -35,7 +34,7 @@ public class RentalServiceTest {
     @Before
     public void before() {
         service = new RentalService();
-        RentalDAO rentalDAO = new RentalDAOFake();
+        RentalDAO rentalDAO = Mockito.mock(RentalDAO.class);
         service.setRentalDAO(rentalDAO);
     }
 
@@ -122,7 +121,16 @@ public class RentalServiceTest {
         Assert.assertThat(rental.getDateReturn(), CustomMatchers.willBeMonday());
     }
 
-    public static void main(String[] args) {
-        new BuilderMaster().gerarCodigoClasse(Rental.class);
+    @Test
+    public void shouldNotRentMovieIfUserNegatedOnSPC() throws MovieWithoutStockException, RentalCompanyException {
+        // scenario
+        User user = UserBuilder.oneUser().build();
+        List<Movie> movies = Arrays.asList(MovieBuilder.oneMovie().build());
+
+        expectedException.expect(RentalCompanyException.class);
+        expectedException.expectMessage("User Negated");
+
+        // action
+        service.rentalMovies(user, movies);
     }
 }
